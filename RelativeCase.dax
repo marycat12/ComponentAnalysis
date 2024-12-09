@@ -1,0 +1,124 @@
+RelativeCaseTypesPerBasket = 
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+    //COUNTROWS counts the number of rows in this summarized table (the one created on line 4)
+    SUMMARIZE( 
+        //SUMMARIZE creates a table that contains each combination of serial number and year only once, before it states to which table it refers in general
+        ALL('main data'), // ALL ignoriert alle Filter auf 'main data'
+        'main data'[SerialInterval]
+    )
+)
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS('main data')
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)
+
+RelativeMMNoBasket = 
+VAR CurrentBasketMM = SELECTEDVALUE('main data'[Basket MM])
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('main data'), 
+                'main data'[Basket MM] = CurrentBasketMM
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', // Hier werden die Filter der Benutzeroberfläche angewendet
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
+
+  RelativePositionNoBasket = 
+VAR CurrentAssemblyPosition = SELECTEDVALUE('flex data'[POSITION])
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('flex data'), 
+                'flex data'[POSITION] = CurrentAssemblyPosition
+            ),
+            'flex data'[SerialInterval]
+        )
+    )
+VAR TotalCaseTypesPerPosition= 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', // Hier werden die Filter der Benutzeroberfläche angewendet
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    DIVIDE(TotalCaseTypesPerPosition, NumberofActualBaskets, 0)*100
+
+RelativeProjectNoBaske = 
+VAR CurrentProject = SELECTEDVALUE('main data'[Name])
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('main data'), 
+                'main data'[Name] = CurrentProject
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', // Hier werden die Filter der Benutzeroberfläche angewendet
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
+
+RelativetFrameNoBaske = 
+VAR CurrentFrameType = SELECTEDVALUE('main data'[Frame Type])
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('main data'), 
+                'main data'[Frame Type] = CurrentFrameType
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', // Hier werden die Filter der Benutzeroberfläche angewendet
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
+
+RelativeYearNoBasket = 
+VAR CurrentYear = SELECTEDVALUE('main data'[Year])
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('main data'), 
+                'main data'[Year] = CurrentYear
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', // Hier werden die Filter der Benutzeroberfläche angewendet
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
