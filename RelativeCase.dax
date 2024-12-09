@@ -1,3 +1,6 @@
+////////Calculate Relative Amounts////////
+
+//Per Basket//
 RelativeCaseTypesPerBasket = 
 VAR NumberofActualBaskets = 
     COUNTROWS(
@@ -13,6 +16,7 @@ VAR TotalCaseTypesPerMM =
 RETURN
     DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)
 
+//Per MM//
 RelativeMMNoBasket = 
 VAR CurrentBasketMM = SELECTEDVALUE('main data'[Basket MM])
 VAR NumberofActualBaskets = 
@@ -35,6 +39,7 @@ VAR TotalCaseTypesPerMM =
 RETURN
     DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
 
+//Per Assembly Position//
   RelativePositionNoBasket = 
 VAR CurrentAssemblyPosition = SELECTEDVALUE('flex data'[POSITION])
 VAR NumberofActualBaskets = 
@@ -57,6 +62,7 @@ VAR TotalCaseTypesPerPosition=
 RETURN
     DIVIDE(TotalCaseTypesPerPosition, NumberofActualBaskets, 0)*100
 
+//Per Project Name//
 RelativeProjectNoBaske = 
 VAR CurrentProject = SELECTEDVALUE('main data'[Name])
 VAR NumberofActualBaskets = 
@@ -79,6 +85,7 @@ VAR TotalCaseTypesPerMM =
 RETURN
     DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
 
+//Per Frame//
 RelativetFrameNoBaske = 
 VAR CurrentFrameType = SELECTEDVALUE('main data'[Frame Type])
 VAR NumberofActualBaskets = 
@@ -101,6 +108,7 @@ VAR TotalCaseTypesPerMM =
 RETURN
     DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)*100
 
+//Per Year//
 RelativeYearNoBasket = 
 VAR CurrentYear = SELECTEDVALUE('main data'[Year])
 VAR NumberofActualBaskets = 
