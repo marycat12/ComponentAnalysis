@@ -1,0 +1,66 @@
+\\\\\\\\Tooltip for Matching Components in Power BI\\\\\\\\
+
+\\Measure\\
+
+TooltipMM = 
+VAR AffectedBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            FILTER(
+                ALL('main data'), 
+                'main data'[Basket MM] = SELECTEDVALUE('main data'[Basket MM])
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', 
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    IF(TotalBaskets > 0, 
+        FORMAT(TotalBaskets, "0") & "/" & FORMAT(AffectedBaskets, "0"), 
+        BLANK()  // Return BLANK() if there are no affected baskets
+    )
+
+
+////////////////////
+
+\\Amount in Percent\\
+
+%MatchBaskets = 
+VAR AffectedBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            (
+            ALL('main data'),
+            'main data'[NonMatchingBaskets] = 0
+            ),
+            'main data'[SerialInterval]
+        )
+    )
+VAR TotalBaskets = 
+    COUNTROWS(
+        SUMMARIZE(
+            'main data', 
+            'main data'[SerialInterval]
+        )
+    )
+RETURN
+    IF(TotalBaskets > 0, 
+        FORMAT(TotalBaskets, "0") & "/" & FORMAT(AffectedBaskets, "0"), 
+        BLANK()  // Return BLANK() if there are no affected baskets
+    )
+
+
+
+NumberOfTransitions = 
+COUNTROWS(
+    SUMMARIZE(
+        'Transition_Repair_Data', // ALL ignoriert alle Filter auf 'main data'
+        'Transition_Repair_Data'[SerialInterval]
+    )
+)
