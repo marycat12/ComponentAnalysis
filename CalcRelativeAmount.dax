@@ -1,0 +1,75 @@
+\\\\\\\\\\\\\\Calculation of Relative Numbers\\\\\\\\\\\\\\\\\
+
+
+RelC10NoOfBasket = 
+VAR SerialIntervalsWithCaseType10 = 
+    CALCULATETABLE(
+        VALUES('main data'[SerialInterval]),
+        'main data'[Case Type] = 10
+    ) //Tabelle mit einer Spalte mit allen Serialintervallen die bei Case Type 10 haben
+
+VAR CaseTypeCount = 
+    CALCULATE(
+        COUNTROWS(
+            SUMMARIZE(
+            'main data', // ALL ignoriert alle Filter auf 'main data'
+            'main data'[SerialInterval]
+                     )
+                ),
+        'main data'[SerialInterval] IN SerialIntervalsWithCaseType10
+    ) //zählt alle Zeilen der Serialintervalle die in der oberen Tabelle drin sind
+VAR TotalBasketCase10 =
+    COUNTROWS(SerialIntervalsWithCaseType10)
+
+RETURN
+DIVIDE(CaseTypeCount, TotalBasketCase10, 0)*100
+
+
+RelativeCaseTypesPerBasket = 
+VAR NumberofActualBaskets = 
+    COUNTROWS(
+    //COUNTROWS counts the number of rows in this summarized table (the one created on line 4)
+    SUMMARIZE( 
+        //SUMMARIZE creates a table that contains each combination of serial number and year only once, before it states to which table it refers in general
+        ALL('main data'), // ALL ignoriert alle Filter auf 'main data'
+        'main data'[SerialInterval]
+    )
+)
+VAR TotalCaseTypesPerMM = 
+    COUNTROWS('main data')
+RETURN
+    DIVIDE(TotalCaseTypesPerMM, NumberofActualBaskets, 0)
+
+
+
+
+///////////Relative Amount transition x Basket Correlation matrix ///////////
+//Ver1
+Relative = 
+
+VAR AbsoluteNumber = COUNT(Transition_Repair_Data[Measured_Value])
+VAR Percentage =
+    
+        COUNTROWS(
+            Transition_Repair_Data[Measured_Value]
+            ), 
+        ALL(Transition_Repair_Data)
+        
+
+RETURN
+DIVIDE(Percentage,AbsoluteNumber,0)
+
+//Ver2
+Relative = 
+
+VAR AbsoluteNumber = COUNT(Transition_Repair_Data[Measured_Value])
+VAR Percentage =
+    COUNTROWS(
+        SUMMARIZE(
+            ALL(Transition_Repair_Data),
+            'main data'[Basket MM] //PROBLEM LIEGT HIER
+        )
+    )
+
+RETURN
+DIVIDE(AbsoluteNumber,Percentage,0)
